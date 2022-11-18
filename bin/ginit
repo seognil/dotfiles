@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# * ----------------------------------------------------------------
+
+if [[ $(git rev-parse --is-inside-work-tree) ]]; then
+  echo "Already in a git repository"
+  exit 1
+fi
+
+# * ----------------------------------------------------------------
+
+git_commit_init() {
+  touch .gitignore
+  git add .gitignore
+  git commit -m "feat(init): initial commit"
+  git tag init
+}
+
+# * ----------------------------------------------------------------
+
+git init
+
+if [ -f .gitignore ]; then
+  TMP_FILE=$(mktemp)
+  mv .gitignore $TMP_FILE
+
+  git_commit_init
+
+  mv $TMP_FILE .gitignore
+else
+  git_commit_init
+fi
