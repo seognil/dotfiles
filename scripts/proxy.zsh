@@ -26,17 +26,15 @@ proxy() {
   local localproxy='http://127.0.0.1:7890'
   local deadproxy="http://a.deadlink/"
 
+  # * ---------------- switch
+
   case "$1" in
-  boot | on)
-    _proxy_set $localproxy
-    ;;
-  dead)
-    _proxy_set $deadproxy
-    ;;
-  off)
-    _proxy_unset
-    ;;
+  boot | on) _proxy_set $localproxy ;;
+  dead) _proxy_set $deadproxy ;;
+  off) _proxy_unset ;;
   esac
+
+  # * ---------------- echo
 
   if [[ $1 == 'boot' ]]; then
     echo 'Proxy on'
@@ -49,4 +47,4 @@ proxy() {
 
 # * ----------------------------------------------------------------
 
-proxy boot
+alias cg="curl google.com"
