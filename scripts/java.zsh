@@ -36,6 +36,8 @@ local _JV_RC="$HOME/.jvrc"
 
 _jv_use() {
 
+  local ENV_MODE=$2
+
   # * ---------------- check version
 
   local NEW_VER=$1
@@ -46,7 +48,7 @@ _jv_use() {
 
   # * ---------------- prepare $JAVA_HOME (at first run)
 
-  if [[ -z $JAVA_HOME ]]; then
+  if [[ -z $JAVA_HOME || -n $ENV_MODE ]]; then
     local CACHE_DIR="$HOME/Library/Caches/zulu_multishells/$(gdate +%s%N)_$RANDOM"
     mkdir -p $CACHE_DIR
 
@@ -64,9 +66,7 @@ _jv_use() {
 
   # * ---------------- log
 
-  local SILENT=$2
-  [[ -z $SILENT ]] && _jv_echo
-
+  [[ -z $ENV_MODE ]] && _jv_echo
 }
 
 # * ---------------------------------------------------------------- jv default
@@ -106,7 +106,7 @@ jv() {
   env)
     touch $_JV_RC
     export _JV_CURRENT="default"
-    _jv_use default silent
+    _jv_use default env
     ;;
 
   ls | list)
@@ -114,7 +114,7 @@ jv() {
     echo /Library/Java/JavaVirtualMachines/zulu-* | grep -Eo '(\d+\.)*\d+' | sort --numeric-sort
     ;;
 
-  use]) _jv_use $2 ;;
+  use | [[:digit:]]*) _jv_use $1 ;;
 
   default) _jv_default $2 ;;
 
