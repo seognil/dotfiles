@@ -17,15 +17,19 @@ alias li="license-generator install MIT -n 'Seognil LC'"
 
 # init a git repository with basic startup actions
 ginit() (
-  if [[ $(git rev-parse --is-inside-work-tree 2>/dev/null) ]]; then
-    echo "Already a git repository"
+
+  # quit if has at least one commit
+  if [[ -n $(git rev-parse --all 2>/dev/null) ]]; then
+    echo "Git repository already initialized"
     exit 1
   fi
 
   # * ----------------
 
   git_init_action() {
-    git init
+    # maybe already git inited but maybe no commits, so don't quit
+    [[ $(git rev-parse --is-inside-work-tree 2>/dev/null) ]] || git init
+
     touch .gitignore
     git add .gitignore
     git commit -m "feat(init): initial commit"
@@ -34,7 +38,7 @@ ginit() (
 
   # * ----------------
 
-  # ensure an empty .gitignore file of the initial commit
+  # ensure an empty '.gitignore' file for the initial commit
   if [[ -f .gitignore ]]; then
     TMP_FILE=$(mktemp)
     mv .gitignore $TMP_FILE
