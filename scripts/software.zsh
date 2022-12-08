@@ -1,8 +1,18 @@
 # * ------------------------------------------------ brew
 
+# https://stackoverflow.com/questions/41029842/easy-way-to-have-homebrew-list-all-package-dependencies
 alias bb='brew leaves | xargs brew deps --installed --for-each | sed "s/^.*:/$(tput setaf 4)&$(tput sgr0)/"'
+
 alias bout='brew update; brew outdated'
 alias bup='brew upgrade'
+
+alias bs='brew search'
+alias bi='brew install'
+alias bui='brew uninstall'
+alias br='brew reinstall'
+alias bf='brew info'
+
+alias du="du -h"
 
 alias ta='tig --all'
 alias rm='trash'
@@ -11,7 +21,7 @@ alias daisy="open -a DaisyDisk"
 alias iterm="open -a iterm"
 
 alias DDD='date -u +"// TODO // Seognil LC %Y/%m/%d"'
-alias ydl='youtube-dl --proxy http://127.0.0.1:7890'
+alias ydl='yt-dlp --proxy 127.0.0.1:7890 -o "%(title)s.%(resolution)s@%(fps)s.%(dynamic_range)s.%(ext)s"'
 
 # * ------------------------------------------------ ver
 
