@@ -22,6 +22,17 @@ _proxy_unset() {
 
 # * ----------------------------------------------------------------
 
+: "
+$ proxy
+
+$ proxy on
+
+$ proxy off
+
+$ proxy dead
+
+"
+
 proxy() {
   local localproxy='http://127.0.0.1:7890'
   local deadproxy="http://a.deadlink/"
