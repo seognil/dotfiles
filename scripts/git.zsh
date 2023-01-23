@@ -60,8 +60,8 @@ function gw() (
   # * ----------------
 
   local author=${1:-$(git config user.name)}
-  local firstCommitTime=$(git log --stat --author="$author" --reverse | ggrep -oP "(?<=Date:).*" | sed -E 's/\+[0-9]+//' | head -n 1)
-  local lastCommitTime=$(git log --stat --author="$author" -n 1 | ggrep -oP "(?<=Date:).*" | sed -E 's/\+[0-9]+//')
+  local firstCommitTime=$(git log --stat --author="$author" --reverse | rg -oP "(?<=Date:).*" | sd '\+[0-9]+' '' | head -n 1)
+  local lastCommitTime=$(git log --stat --author="$author" -n 1 | rg -oP "(?<=Date:).*" | sd '\+[0-9]+' '')
 
   printf "%-12s : %s\n" "User" $author
   printf "%-12s : %s\n" "First Commit" "$(gdate -d "$firstCommitTime" +'%Y-%m-%d %H:%M:%S')"
@@ -75,11 +75,11 @@ function gw() (
 
     local gitArgs=(log --stat --author="$author" --no-merges)
     [[ -n $since ]] && gitArgs=($gitArgs --since="$since")
-    local gitChanges=$(git $gitArgs | grep -E '\d+ files? changed')
+    local gitChanges=$(git $gitArgs | rg '\d+ files? changed')
 
-    local commmits=$(echo $gitChanges | wc -l | sed 's/ *//')
-    local ins=$(echo $gitChanges | grep -oE '\d+ ins' | awk '{val += $1} END {print val}')
-    local del=$(echo $gitChanges | grep -oE '\d+ del' | awk '{val += $1} END {print val}')
+    local commmits=$(echo $gitChanges | wc -l | sd ' *' '')
+    local ins=$(echo $gitChanges | rg -oP '\d+(?= ins)' | awk '{val += $1} END {print val}')
+    local del=$(echo $gitChanges | rg -oP '\d+(?= del)' | awk '{val += $1} END {print val}')
 
     printf "%-12s : %4s commits, %6s (+), %6s (-)\n" $Label $commmits ${ins-0} ${del-0}
   }

@@ -11,7 +11,8 @@ export ZSH_LC=$(cd -- "$(dirname -- "$0")" &>/dev/null && pwd)
 
 # * ---------------- source all files
 
-for file in $ZSH_LC/scripts/*; do
+# fd -gp "$ZSH_LC/scripts/**/*.zsh"
+for file in $(find $ZSH_LC/scripts/**/*.zsh); do
   source $file
 done
 

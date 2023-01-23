@@ -1,5 +1,11 @@
 # * ------------------------------------------------ brew
 
+: "
+ripgrep: grep, faster
+sd: sed, faster
+fd: find, colorful handful but slower
+"
+
 # https://stackoverflow.com/questions/41029842/easy-way-to-have-homebrew-list-all-package-dependencies
 alias bb='brew leaves | xargs brew deps --installed --for-each | sed "s/^.*:/$(tput setaf 4)&$(tput sgr0)/"'
 
@@ -8,11 +14,14 @@ alias bup='brew upgrade'
 
 alias bs='brew search'
 alias bi='brew install'
+alias bri='brew reinstall'
 alias bui='brew uninstall'
-alias br='brew reinstall'
 alias bf='brew info'
 
 alias du="du -h"
+alias fd="fd -HI"
+
+alias hs='history | rg -P --color=always'
 
 alias ta='tig --all'
 alias rm='trash'
@@ -27,7 +36,7 @@ alias ydl='yt-dlp --proxy 127.0.0.1:7890 -o "%(title)s.%(resolution)s@%(fps)s.%(
 
 function ver() (
   semver() {
-    echo "$@" | grep -Eo '(\d+\.)*\d+'
+    echo $($@) | rg -o '(\d+\.)*\d+'
   }
 
   echo "node   : $(semver node -v) $(node -p 'process.arch')"
