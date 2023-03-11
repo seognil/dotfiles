@@ -16,10 +16,10 @@ for file in $(find $ZSH_LC/scripts/**/*.zsh); do
   source $file
 done
 
-for file in $ZSH_LC/unsync/*; do
-  source $file
-done
+# for file in $(find $ZSH_LC/local/**/*.zsh); do
+#   source $file
+# done
 
 # * ----------------
 
-alias reload='omz reload'
+alias reload='. $ZSH_LC/index.zsh; history -r >/dev/null 2>&1'
