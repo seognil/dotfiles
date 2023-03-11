@@ -24,25 +24,16 @@ $ duc ~/.oh-my-zsh/
 " && return
   done
 
-  # * ---------------- empty argument
+  # * ---------------- transform search result into array
 
-  [[ -z $1 ]] && echo "duc: : Empty input, try 'duc git'" >&2 && return 2
+  # https://stackoverflow.com/questions/5051556/in-a-linux-shell-how-can-i-process-each-line-of-a-multiline-string
 
-  # * ---------------- at least one argument
+  declare -a file_path_arr
 
-  local exit_flag=0
+  file_paths=$(getpath "$@" 2>/dev/null)
+  echo $file_paths | while read -r line; do file_path_arr+=$line; done
 
-  for opt in $@; do
-    _duc_single $opt || exit_flag=2
-  done
+  # * ---------------- dua
 
-  return $exit_flag
-
-}
-
-# * --------------------------------
-
-_duc_single() {
-  local the_path=$(getpath $1)
-  [[ -n $the_path ]] && du -h $the_path || return 2
+  dua "${file_path_arr[@]}"
 }
