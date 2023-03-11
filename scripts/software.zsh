@@ -1,11 +1,5 @@
 # * ------------------------------------------------ brew
 
-: "
-ripgrep: grep, faster
-sd: sed, faster
-fd: find, colorful handful but slower
-"
-
 # https://stackoverflow.com/questions/41029842/easy-way-to-have-homebrew-list-all-package-dependencies
 alias bb='brew leaves | xargs brew deps --installed --for-each | sed "s/^.*:/$(tput setaf 4)&$(tput sgr0)/"'
 
@@ -20,6 +14,36 @@ alias bf='brew info'
 
 alias du="du -h"
 alias fd="fd -HI"
+alias l="exa -lah"
+alias scc="scc --no-cocomo --no-size"
+
+alias grhh="git clean -fd && git reset --hard"
+
+helpme() {
+  if [[ -z $1 ]]; then
+    local helpnote='
+ripgrep: grep, faster
+sd: sed, faster
+fd: find, colorful handful but slower
+fzf:
+exa: ls, colorful
+tre: tree, colorful
+dua: du, smart
+bpytop/btop: htop, colorful
+gping: ping, chart
+'
+    echo $helpnote
+  elif [[ $1 == 'clean' ]]; then
+    local helpnote='
+brew cleanup
+yarn cache clean
+npm cache clean --force
+pnpm store prune
+  '
+    echo $helpnote
+  fi
+}
+alias \?='helpme'
 
 alias hs='history | rg -P --color=always'
 

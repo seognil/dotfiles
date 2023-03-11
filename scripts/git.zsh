@@ -91,6 +91,8 @@ function gw() (
 
 )
 
+alias gitweekly="gw"
+
 # * ---------------------------------------------------------------- tools
 
 # commits time graph
