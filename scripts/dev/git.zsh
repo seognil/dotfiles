@@ -7,6 +7,10 @@ function gi() { curl -sLw n https://www.toptal.com/developers/gitignore/api/$@; 
 # git user commits statistics
 alias gua='git shortlog -sne --all'
 
+alias grhh="git clean -fd && git reset --hard"
+
+alias ta='tig --all'
+
 alias li="license-generator install MIT -n 'Seognil LC'"
 
 # * ---------------------------------------------------------------- config switcher
@@ -15,41 +19,33 @@ alias li="license-generator install MIT -n 'Seognil LC'"
 
 # * ---------------------------------------------------------------- ginit
 
-# init a git repository with basic startup actions
-ginit() (
-
-  # quit if has at least one commit
-  if [[ -n $(git rev-parse --all 2>/dev/null) ]]; then
-    echo "Git repository already initialized"
-    exit 1
-  fi
-
-  # * ----------------
-
-  git_init_action() {
-    # maybe already git inited but maybe no commits, so don't quit
-    [[ $(git rev-parse --is-inside-work-tree 2>/dev/null) ]] || git init
-
-    touch .gitignore
-    git add .gitignore
-    git commit -m "feat(init): initial commit"
-    git tag init
+# 在当前目录快速初始化 git
+ginit() {
+  # 如果已有 commit 则退出
+  git rev-parse --verify HEAD >/dev/null 2>&1 && {
+    echo "git already initialized"
+    return 1
   }
 
-  # * ----------------
+  # 如果非 git 仓库，则 init
+  git rev-parse --is-inside-work-tree >/dev/null 2>&1 || git init
 
-  # ensure an empty '.gitignore' file for the initial commit
-  if [[ -f .gitignore ]]; then
+  # 检查是否已存在 .gitignore 文件
+  local TMP_FILE=""
+  [[ -f .gitignore ]] && {
     TMP_FILE=$(mktemp)
-    mv .gitignore $TMP_FILE
+    mv .gitignore "$TMP_FILE"
+  }
 
-    git_init_action
+  # 创建初始 commit，包含空的 .gitignore
+  touch .gitignore
+  git add .gitignore
+  git commit -m "feat(init): initial commit"
+  git tag init
 
-    mv $TMP_FILE .gitignore
-  else
-    git_init_action
-  fi
-)
+  # 恢复原始的 .gitignore 文件
+  [[ -n $TMP_FILE ]] && mv "$TMP_FILE" .gitignore
+}
 
 # * ---------------------------------------------------------------- git weekly
 

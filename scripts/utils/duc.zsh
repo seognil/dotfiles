@@ -28,9 +28,8 @@ $ duc ~/.oh-my-zsh/
 
   # https://stackoverflow.com/questions/5051556/in-a-linux-shell-how-can-i-process-each-line-of-a-multiline-string
 
-  declare -a file_path_arr
-
   file_paths=$(getpath "$@" 2>/dev/null)
+  local -a file_path_arr=()
   echo $file_paths | while read -r line; do file_path_arr+=$line; done
 
   # * ---------------- dua

@@ -13,6 +13,7 @@ hsi => '' # alias hsi='history | grep -i' history=omz_history
 
 # * --------------------------------
 
+
 getpath() {
 
   # * ---------------- help
@@ -33,9 +34,12 @@ $ getpath ~/.zshrc
 " && return
   done
 
-  # * ---------------- empty argument
+  # * ---------------- empty argument will get current dir
 
-  [[ -z $1 ]] && echo "getpath: : Empty input, try 'getpath ls'" >&2 && return 2
+  if [[ -z $1 ]]; then
+    _getpath_single .
+    return 0
+  fi
 
   # * ---------------- at least one argument
 
